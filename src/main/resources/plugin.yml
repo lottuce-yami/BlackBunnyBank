@@ -1,0 +1,4 @@
+main: moe.lottuce.blackbunnybank.BlackBunnyBank
+name: BlackBunnyBank
+version: 0.1
+api-version: 1.16

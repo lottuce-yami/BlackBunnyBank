@@ -1,8 +1,7 @@
 package moe.lottuce.blackbunnybank;
 
-import moe.lottuce.blackbunnybank.pouch.PouchUseListener;
-import moe.lottuce.blackbunnybank.pouch.PouchInventoryListener;
-import moe.lottuce.blackbunnybank.pouch.PouchRecipe;
+import moe.lottuce.blackbunnybank.pouch.Pouch;
+import moe.lottuce.blackbunnybank.pouch.PouchListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,9 +12,10 @@ import java.sql.Statement;
 
 public class BlackBunnyBank extends JavaPlugin {
 
-    Connection connection = null;
-    Statement stmt = null;
+    private Connection connection = null;
+    private Statement stmt = null;
 
+    @Override
     public void onEnable() {
 
         try {
@@ -27,14 +27,22 @@ public class BlackBunnyBank extends JavaPlugin {
             e.printStackTrace();
         }
 
-        getServer().getPluginManager().registerEvents(new PouchInventoryListener(), this);
-        getServer().getPluginManager().registerEvents(new PouchUseListener(), this);
-        Bukkit.addRecipe(PouchRecipe.pouchRecipe(this));
+        getServer().getPluginManager().registerEvents(new PouchListener(), this);
+        Bukkit.addRecipe(Pouch.pouchRecipe(this));
         getLogger().info("Enabled!");
 
     }
 
+    @Override
     public void onDisable() {
+        if (connection != null && stmt != null) {
+            try {
+                stmt.close();
+                connection.close();
+            } catch(SQLException e) {
+                e.printStackTrace();
+            }
+        }
         getLogger().info("Disabled!");
     }
 

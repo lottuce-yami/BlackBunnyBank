@@ -7,14 +7,16 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class PouchInventoryListener implements Listener {
+public class PouchListener implements Listener {
 
     @EventHandler
-    public void onClick(InventoryClickEvent event) {
+    public void onInventoryClick(InventoryClickEvent event) {
 
         if (event.getView().title().equals(Component.text("Мешочек").color(TextColor.color(127, 85, 57)))) {
 
@@ -54,9 +56,24 @@ public class PouchInventoryListener implements Listener {
 
     }
 
-    public void onDrag(InventoryDragEvent event) {
+    public void onDrag(InventoryDragEvent event) { }
 
+    @EventHandler
+    public void onClick(PlayerInteractEvent event) {
 
+        ItemStack item = event.getItem();
+        if (item != null && item.equals(Pouch.getPouchItem())) {
+
+            Player player = event.getPlayer();
+            Action action = event.getAction();
+
+            switch (action) {
+
+                case RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK -> Pouch.openPouch(player);
+
+            }
+
+        }
 
     }
 

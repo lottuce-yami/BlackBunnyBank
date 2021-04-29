@@ -6,16 +6,19 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
-public class Pouch {
+import java.util.ArrayList;
+import java.util.List;
 
-    public static void openPouch(Player player) {
+public interface Pouch {
+
+    static void openPouch(Player player) {
 
         Inventory pouch = Bukkit.getServer().createInventory(null, 36, Component.text("Мешочек").color(TextColor.color(127, 85, 57)));
 
@@ -64,6 +67,50 @@ public class Pouch {
         pouch.setItem(35, backgroundItem);
 
         player.openInventory(pouch);
+
+    }
+
+    static ItemStack getPouchItem() {
+
+        ItemStack pouch = new ItemStack(Material.BROWN_DYE);
+        ItemMeta pouchMeta = pouch.getItemMeta();
+
+        pouchMeta.displayName(Component.text("Мешочек").color(TextColor.color(127, 85, 57)).decoration(TextDecoration.ITALIC, false));
+        pouchMeta.setCustomModelData(1);
+
+        List<Component> pouchLore = new ArrayList<>();
+        pouchLore.add(Component.text(""));
+        pouchLore.add(Component.text("Волшебный мешочек, в котором вы храните монетки."));
+        pouchLore.add(Component.text("Но как же он работает?..."));
+        pouchLore.add(Component.text(""));
+        pouchMeta.lore(pouchLore);
+
+        pouch.setItemMeta(pouchMeta);
+
+        return pouch;
+
+    }
+
+    static ShapedRecipe pouchRecipe(Plugin plugin) {
+
+        ItemStack pouch = getPouchItem();
+
+        NamespacedKey key = new NamespacedKey(plugin, "pouch");
+        ShapedRecipe recipe = new ShapedRecipe(key, pouch);
+
+        recipe.shape(" H ", "LEL", "HCH");
+        recipe.setIngredient('C', Material.CHORUS_FRUIT);
+        recipe.setIngredient('H', Material.RABBIT_HIDE);
+        recipe.setIngredient('E', Material.ENDER_EYE);
+        recipe.setIngredient('L', Material.LEATHER);
+
+        return recipe;
+
+    }
+
+    static void registerPouch(Player player) {
+
+
 
     }
 

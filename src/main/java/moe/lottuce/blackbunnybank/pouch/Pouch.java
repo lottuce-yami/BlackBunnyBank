@@ -1,55 +1,68 @@
 package moe.lottuce.blackbunnybank.pouch;
 
+import moe.lottuce.blackbunnybank.BlackBunnyBank;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftInventoryCustom;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public interface Pouch {
+public class Pouch extends CraftInventoryCustom {
 
-    static void openPouch(Player player) {
+    public Pouch(@NotNull String name) {
 
-        Inventory pouch = Bukkit.getServer().createInventory(null, 36, Component.text("Мешочек").color(TextColor.color(127, 85, 57)));
+        super(null, 36, Component.text(Objects.requireNonNull(BlackBunnyBank.lang.getString("pouch")) + "\"" + name + "\"").color(TextColor.color(127, 85, 57)));
+        toolbar(this);
 
-        ItemStack nameItem = new ItemStack(Material.NAME_TAG);
-        ItemMeta nameMeta = nameItem.getItemMeta();
-        nameMeta.displayName(Component.text("Переименовать мешочек").color(TextColor.color(127, 85, 57)).decoration(TextDecoration.ITALIC, false));
-        nameItem.setItemMeta(nameMeta);
+    }
+
+    public Pouch() {
+
+        super(null, 36, Component.text(Objects.requireNonNull(BlackBunnyBank.lang.getString("pouch"))).color(TextColor.color(127, 85, 57)));
+        toolbar(this);
+
+    }
+
+    private void toolbar(Pouch pouch) {
+
+        ItemStack renameItem = new ItemStack(Material.NAME_TAG);
+        ItemMeta renameMeta = renameItem.getItemMeta();
+        renameMeta.displayName(Component.text(Objects.requireNonNull(BlackBunnyBank.lang.getString("change-data"))).color(TextColor.color(127, 85, 57)).decoration(TextDecoration.ITALIC, false));
+        renameItem.setItemMeta(renameMeta);
 
         ItemStack exchangeItem = new ItemStack(Material.PUMPKIN_SEEDS);
         ItemMeta exchangeMeta = exchangeItem.getItemMeta();
-        exchangeMeta.displayName(Component.text("Разменять монеты").color(NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
+        exchangeMeta.displayName(Component.text(Objects.requireNonNull(BlackBunnyBank.lang.getString("exchange-coins"))).color(NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
         exchangeItem.setItemMeta(exchangeMeta);
 
         ItemStack sendItem = new ItemStack(Material.SPECTRAL_ARROW);
         ItemMeta sendMeta = sendItem.getItemMeta();
-        sendMeta.displayName(Component.text("Сделать перевод").color(NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false));
+        sendMeta.displayName(Component.text(Objects.requireNonNull(BlackBunnyBank.lang.getString("send-coins"))).color(NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false));
         sendMeta.addEnchant(Enchantment.LUCK, 1, false);
         sendMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         sendItem.setItemMeta(sendMeta);
 
         ItemStack tradeItem = new ItemStack(Material.BREWING_STAND);
         ItemMeta tradeMeta = tradeItem.getItemMeta();
-        tradeMeta.displayName(Component.text("Совершить сделку").color(NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+        tradeMeta.displayName(Component.text(Objects.requireNonNull(BlackBunnyBank.lang.getString("trade"))).color(NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
         tradeItem.setItemMeta(tradeMeta);
 
         ItemStack contractItem = new ItemStack(Material.PIGLIN_BANNER_PATTERN);
         ItemMeta contractMeta = contractItem.getItemMeta();
         contractMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-        contractMeta.displayName(Component.text("Подписать договор").color(NamedTextColor.BLUE).decoration(TextDecoration.ITALIC, false));
+        contractMeta.displayName(Component.text(Objects.requireNonNull(BlackBunnyBank.lang.getString("sign-contract"))).color(NamedTextColor.BLUE).decoration(TextDecoration.ITALIC, false));
         contractItem.setItemMeta(contractMeta);
-
 
         ItemStack backgroundItem = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         ItemMeta backgroundMeta = backgroundItem.getItemMeta();
@@ -58,7 +71,7 @@ public interface Pouch {
 
         pouch.setItem(27, backgroundItem);
         pouch.setItem(28, backgroundItem);
-        pouch.setItem(29, nameItem);
+        pouch.setItem(29, renameItem);
         pouch.setItem(30, exchangeItem);
         pouch.setItem(31, sendItem);
         pouch.setItem(32, tradeItem);
@@ -66,34 +79,34 @@ public interface Pouch {
         pouch.setItem(34, backgroundItem);
         pouch.setItem(35, backgroundItem);
 
-        player.openInventory(pouch);
-
     }
 
-    static ItemStack getPouchItem() {
+    public static ItemStack pouchItem() {
 
-        ItemStack pouch = new ItemStack(Material.BROWN_DYE);
-        ItemMeta pouchMeta = pouch.getItemMeta();
+        ItemStack pouchItem = new ItemStack(Material.BROWN_DYE);
 
-        pouchMeta.displayName(Component.text("Мешочек").color(TextColor.color(127, 85, 57)).decoration(TextDecoration.ITALIC, false));
+        ItemMeta pouchMeta = pouchItem.getItemMeta();
+        pouchMeta.displayName(Component.text(Objects.requireNonNull(BlackBunnyBank.lang.getString("pouch"))).color(TextColor.color(127, 85, 57)).decoration(TextDecoration.ITALIC, false));
         pouchMeta.setCustomModelData(1);
-
         List<Component> pouchLore = new ArrayList<>();
-        pouchLore.add(Component.text(""));
-        pouchLore.add(Component.text("Волшебный мешочек, в котором вы храните монетки."));
-        pouchLore.add(Component.text("Но как же он работает?..."));
-        pouchLore.add(Component.text(""));
+        List<String> pouchLoreRaw = BlackBunnyBank.lang.getStringList("pouchLore");
+
+        for (String s : pouchLoreRaw) {
+
+            pouchLore.add(Component.text(s));
+
+        }
+
         pouchMeta.lore(pouchLore);
+        pouchItem.setItemMeta(pouchMeta);
 
-        pouch.setItemMeta(pouchMeta);
-
-        return pouch;
+        return pouchItem;
 
     }
 
-    static ShapedRecipe pouchRecipe(Plugin plugin) {
+    public static ShapedRecipe recipe(Plugin plugin) {
 
-        ItemStack pouch = getPouchItem();
+        ItemStack pouch = pouchItem();
 
         NamespacedKey key = new NamespacedKey(plugin, "pouch");
         ShapedRecipe recipe = new ShapedRecipe(key, pouch);
@@ -105,12 +118,6 @@ public interface Pouch {
         recipe.setIngredient('L', Material.LEATHER);
 
         return recipe;
-
-    }
-
-    static void registerPouch(Player player) {
-
-
 
     }
 

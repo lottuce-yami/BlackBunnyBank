@@ -1,0 +1,6 @@
+# config file for the BlackBunnyBank plugin
+# edit carefully! yaml doesn't forgive mistakes.
+
+# language code or a self-made .yml file name
+# available languages: en, ru, uk
+language: en

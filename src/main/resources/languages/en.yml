@@ -1,0 +1,19 @@
+# language file for the BlackBunnyBank plugin
+# edit carefully! yaml doesn't forgive mistakes.
+
+# general pouch name
+pouch: "Pouch"
+
+# lore that is displayed on a pouch item
+pouchLore:
+  - ""
+  - "Magical pouch where you store coins."
+  - "But how does it work?..."
+  - ""
+
+# actions inside of a pouch
+change-data: "Change data"
+exchange-coins: "Exchange coins"
+send-coins: "Send coins"
+trade: "Trade"
+sign-contract: "Sign a contract"

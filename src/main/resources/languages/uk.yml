@@ -1,0 +1,19 @@
+# language file for the BlackBunnyBank plugin
+# edit carefully! yaml doesn't forgive mistakes.
+
+# general pouch name
+pouch: "Мішечок"
+
+# lore that is displayed on a pouch item
+pouchLore:
+  - ""
+  - "Чарівний мішечок, в якому ви зберігаєте монетки."
+  - "Але як він працює?..."
+  - ""
+
+# actions inside of a pouch
+change-data: "Змінити дані"
+exchange-coins: "Розміняти монетки"
+send-coins: "Здійснити переказ"
+trade: "Торгувати"
+sign-contract: "Укласти угоду"

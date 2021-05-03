@@ -2,14 +2,12 @@ package moe.lottuce.blackbunnybank.pouch;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,59 +16,49 @@ public class PouchListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
 
-        if (event.getView().title().equals(Component.text("Мешочек").color(TextColor.color(127, 85, 57)))) {
+        ItemStack clickedItem = event.getCurrentItem();
 
-            event.getWhoClicked().sendMessage(Component.text("Тьху."));
+        if (event.getClickedInventory() instanceof Pouch && clickedItem != null) {
 
-            ItemStack clickedItem = event.getCurrentItem();
             Player player = (Player) event.getWhoClicked();
 
-            if (clickedItem != null) {
-
+            // TODO class for handling all the coins types
                 if (clickedItem.getItemMeta().hasCustomModelData() && clickedItem.getType() == Material.WRITTEN_BOOK) {
-
                     if (clickedItem.getItemMeta().getCustomModelData() == 3 || clickedItem.getItemMeta().getCustomModelData() == 4) {
 
-                        player.sendMessage(Component.text("Капиц, эта сто, ФЭИКАВЫЕ МАНЕТЫ??!!!1").color(NamedTextColor.RED));
+                        player.sendMessage(Component.text("Капиц, эта сто, ФЭИКАВЫЕ МАНЕТЫ??!!!1").color(NamedTextColor.RED)); // bruh
 
                     }
-
                 } else {
-
                     switch (clickedItem.getType()) {
+
                         case NAME_TAG, PUMPKIN_SEEDS, SPECTRAL_ARROW, BREWING_STAND, PIGLIN_BANNER_PATTERN -> {
 
                             event.setCancelled(true);
-                            player.sendMessage(Component.text("Пака сто ни лаботаит т-т").color(NamedTextColor.RED));
+                            player.sendMessage(Component.text("Пака сто ни лаботаит т-т").color(NamedTextColor.RED)); // bruh
 
                         }
                         default -> event.setCancelled(true);
 
                     }
-
                 }
 
             }
 
         }
 
-    }
-
-    public void onDrag(InventoryDragEvent event) { }
-
     @EventHandler
-    public void onClick(PlayerInteractEvent event) {
+    public void onItemClick(PlayerInteractEvent event) {
 
-        ItemStack item = event.getItem();
-        if (item != null && item.equals(Pouch.getPouchItem())) {
+        ItemStack clickedItem = event.getItem();
 
-            Player player = event.getPlayer();
+        if (clickedItem != null && clickedItem.equals(Pouch.pouchItem())) {
+
             Action action = event.getAction();
+            Player player = event.getPlayer();
 
             switch (action) {
-
-                case RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK -> Pouch.openPouch(player);
-
+                case RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK -> player.openInventory(new Pouch());
             }
 
         }
